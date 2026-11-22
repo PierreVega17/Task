@@ -1,0 +1,50 @@
+# Archivos compilados y caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales (Virtual Environments)
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Variables de entorno y secretos (¡Muy importante!)
+.env
+.env.local
+.env.*.local
+
+# Distribución y empaquetado
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pruebas y cobertura (Testing & Coverage)
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Herramientas de análisis estático y linters
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Bases de datos locales comunes en desarrollo
+*.sqlite3
+*.db
+
+# Archivos de editores e IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

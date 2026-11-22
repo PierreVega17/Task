@@ -1,0 +1,46 @@
+from fastapi import APIRouter, HTTPException, status, Depends
+from typing import List
+from app.schemas.task import TaskCreate, TaskUpdate, TaskResponse
+from app.services.task_service import TaskService
+from app.dependencies import get_task_service
+from app.exceptions.task_exceptions import TaskNotFoundError
+
+router = APIRouter(prefix="/tasks", tags=["Tasks"])
+
+@router.get("", response_model=list[TaskResponse])
+def get_tasks(
+    service: TaskService = Depends(get_task_service)
+):
+    return service.get_tasks()
+
+@router.get("/{task_id}", response_model=TaskResponse)
+def get_task(task_id: int, service: TaskService = Depends(get_task_service)):
+    try:
+        return service.get_task(task_id)
+    except TaskNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    
+@router.post(
+    "",
+    response_model=TaskResponse,
+    status_code=status.HTTP_201_CREATED
+)
+def create_task(
+    task_data: TaskCreate,
+    service: TaskService = Depends(get_task_service)
+):
+    return service.create_task(task_data)
+
+@router.patch("/{task_id}", response_model=TaskResponse)
+def update_task(task_id: int, task_data: TaskUpdate, service: TaskService = Depends(get_task_service)):
+    try:
+        return service.update_task(task_id, task_data)
+    except TaskNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task(task_id: int, service: TaskService = Depends(get_task_service)) -> None:
+    try:
+        service.delete_task(task_id)
+    except TaskNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
